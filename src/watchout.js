@@ -43,6 +43,15 @@ var game = function(height, width, numOfEnemies) {
     return enemy;
   };
 
+  var Player = function() {
+    var player = {
+      "id" : 'player',
+      "x": gameOptions.width * 0.5,
+      "y": gameOptions.height * 0.5
+    };
+    return player;
+  };
+
   // makes the array of objects
   var data = _.range(0, gameOptions.numberOfEnemies).map(function(i){
     return Enemy(i);
