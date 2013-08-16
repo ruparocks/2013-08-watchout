@@ -21,24 +21,41 @@
 
 // append svg tag to the body within a variable
 
-var game = function() {
-  var svg = d3.select("body").append("svg");
-  var width;
-  var height;
-  var numberOfEnemies = 30;
+var game = function(height, width, numOfEnemies) {
+  // make object gameOptions to hold all the game options
+  var gameOptions = {
+    height: height,
+    width: width,
+    numberOfEnemies: numOfEnemies
+  };
+
+  // make the svg element
+  var svg = d3.select("body").append("svg").attr("class", "gameBoard").attr("height", gameOptions.height).attr("width", gameOptions.width);
+
   // make our enemy class
   var Enemy = function(i) {
     var enemy = {
       "id": i,
       "x": Math.random() * width, // *100 to navigate on x-axis when range is 0-100
       "y": Math.random() * height, // *100 to navigate on y-axis when range is 0-100
-      "r": 0
+      "r": 10
     };
+    return enemy;
   };
+
+  // makes the array of objects
+  var data = _.range(0, gameOptions.numberOfEnemies).map(function(i){
+    return Enemy(i);
+  });
+
+  console.log(data);
+  var enemies = svg.selectAll("circle.enemy").data(data);
+  enemies.enter().append("circle").attr("class", "enemy").attr("fill", "black").attr("cx", function(d){return d.x;}).attr("cy", function(d) {return d.y;}).attr("r", function(d){return d.r;});
+
   // d3 to make one black circle in the svg
-  d3.select("svg").append("circle").attr("class", "enemy").attr("cx", "100px").attr("cy", "100px").attr("r", "5px").attr("fill", "black");
+  // d3.select("svg").append("circle").attr("class", "enemy").attr("cx", "100px").attr("cy", "100px").attr("r", "5px").attr("fill", "black");
   //Function to generate all enemies
   //
 };
 
-game();
+game(700, 700, 10);
