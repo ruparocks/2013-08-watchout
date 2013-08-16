@@ -1,4 +1,10 @@
-.gameBoard {
-  border-color: black;
+/* needs work, not changing svg */
+#gameBoard {
+  background-color: #999;
+  border-color: "black";
   border-width: 1px;
+  margin: auto;
+  width: 900px;
+  height: 800px;
+  text-align: center;
 }

@@ -30,7 +30,7 @@ var game = function(height, width, numOfEnemies) {
   };
 
   // make the svg element
-  var svg = d3.select("body").append("svg").attr("class", "gameBoard").attr("height", gameOptions.height).attr("width", gameOptions.width);
+  var svg = d3.select("#gameBoard").append("svg").attr("height", gameOptions.height).attr("width", gameOptions.width);
 
   // make our enemy class
   var Enemy = function(i) {
