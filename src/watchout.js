@@ -48,14 +48,67 @@ var game = function(height, width, numOfEnemies) {
     return Enemy(i);
   });
 
-  console.log(data);
   var enemies = svg.selectAll("circle.enemy").data(data);
+
   enemies.enter().append("circle").attr("class", "enemy").attr("fill", "black").attr("cx", function(d){return d.x;}).attr("cy", function(d) {return d.y;}).attr("r", function(d){return d.r;});
 
-  // d3 to make one black circle in the svg
-  // d3.select("svg").append("circle").attr("class", "enemy").attr("cx", "100px").attr("cy", "100px").attr("r", "5px").attr("fill", "black");
-  //Function to generate all enemies
-  //
+  //update function.
+  //find new coordinates for all enemies
+  //setInterval for once/second
+  //animate Tween for all enemies.
+  var updateEnemies = function(data) {
+    enemies.transition()
+      .duration(500)
+      .attr('cx', function(d) {return Math.random() * gameOptions.width;})
+      .attr('cy', function(d) {return Math.random() * gameOptions.height;});
+  };
+
+  setInterval(updateEnemies, 1000);
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 game(700, 700, 10);
