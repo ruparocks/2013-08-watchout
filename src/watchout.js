@@ -1,25 +1,11 @@
-// Draw the enemies in an svg element.
-// Make it so that the enemies move to a new random location every second.
-// Make a differently-colored dot to represent the player. Make it draggable.
-// Detect when a enemy touches you.
 // Keep track of the user's score, and display it.
-//
-// make a player
-//   move relative, move absolute, get and set x and y.
-//   needs to be an SVG
-// make an enemy
-//   has x, y, radius
-//   next position
-// make an array of enemies
-// render the enemies
+
 // make a gameboard (axes)
 // make game options and game stats
 // make function to actually play (increment scores, generate new enemies, etc.) enter, update, edit
 // make collission detection function
 // make dragging functionality
 // update scores
-
-// append svg tag to the body within a variable
 
 var game = function(height, width, numOfEnemies) {
   // make object gameOptions to hold all the game options
@@ -28,9 +14,13 @@ var game = function(height, width, numOfEnemies) {
     width: width,
     numberOfEnemies: numOfEnemies
   };
-
+  var highScore = 0;
+  var currentScore = 0;
   // make the svg element
   var svg = d3.select("#gameBoard").append("svg").attr("height", gameOptions.height).attr("width", gameOptions.width);
+
+  d3.select("#score").append("h3").text("High Score: " + highScore).attr("class", "highscore");
+  d3.select("#score").append("h3").text("My Score: " + currentScore).attr("class", "myscore");
 
   // make our enemy class
   var Enemy = function(i) {
@@ -57,12 +47,13 @@ var game = function(height, width, numOfEnemies) {
   var enemyData = _.range(0, gameOptions.numberOfEnemies).map(function(i){
     return Enemy(i);
   });
-
   var playerData = [Player()];
 
+  // sets pairs for all enemies and player
   var enemies = svg.selectAll("circle.enemy").data(enemyData);
   var player = svg.selectAll("circle.player").data(playerData);
 
+  // performs the dragging
   var dragMove = d3.behavior.drag()
     .on('drag', function(d) {
       d.x += d3.event.dx;
@@ -70,6 +61,36 @@ var game = function(height, width, numOfEnemies) {
       d3.select(this).attr('cx', function(d) {return d.x;}).attr('cy', function(d) {return d.y;});
     });
 
+  // collisionChecker
+  var collisionChecker = function() {
+    var playerX = d3.select("circle.player").attr("cx");
+    var playerY = d3.select("circle.player").attr("cy");
+    var playerR = d3.select("circle.player").attr("r");
+    var enemyX = d3.select(this).attr("cx");
+    var enemyY = d3.select(this).attr("cy");
+    var enemyR = d3.select(this).attr("r");
+    var distance;
+    distance = Math.sqrt(Math.pow(enemyX - playerX, 2) + Math.pow(enemyY - playerY, 2)) - enemyR - playerR;
+    if (distance < 0) {
+        console.log("collision!");
+        currentScore = 0;
+        d3.select(".myscore").text("My Score: " + currentScore);
+        // update highest score
+    } else {
+      currentScore++;
+      d3.select(".myscore").text("My Score: " + currentScore);
+    }
+  };
+
+  //updates enemies
+  var updateEnemies = function(data) {
+    enemies.transition()
+      .duration(500)
+      .attr('cx', function(d) {return Math.random() * gameOptions.width;})
+      .attr('cy', function(d) {return Math.random() * gameOptions.height;});
+  };
+
+  // appends enemies with styles
   enemies.enter().append("circle")
     .attr("class", "enemy")
     .attr("fill", "black")
@@ -77,6 +98,7 @@ var game = function(height, width, numOfEnemies) {
     .attr("cy", function(d) {return d.y;})
     .attr("r", function(d){return d.r;});
 
+  //// appends player with styles
   player.enter().append("circle")
     .attr("class", "player")
     .attr("fill", "red")
@@ -85,37 +107,7 @@ var game = function(height, width, numOfEnemies) {
     .attr("r", function(d){return d.r;})
     .call(dragMove);
 
-// collisionChecker
-  var collisionChecker = function() {
-    var playerX = d3.select("circle.player").attr("cx");
-    var playerY = d3.select("circle.player").attr("cy");
-    var playerR = d3.select("circle.player").attr("r");
-
-    var enemyX = d3.select(this).attr("cx");
-    var enemyY = d3.select(this).attr("cy");
-    var enemyR = d3.select(this).attr("r");
-    var distance;
-    distance = Math.sqrt(Math.pow(enemyX - playerX, 2) + Math.pow(enemyY - playerY, 2)) - enemyR - playerR;
-    if (distance < 0) {
-        console.log("collision!");
-        // update score
-        // update highest score
-        // reset score
-    }
-  };
-
-
-  //update function.
-  //find new coordinates for all enemies
-  //setInterval for once/second
-  //animate Tween for all enemies.
-  var updateEnemies = function(data) {
-    enemies.transition()
-      .duration(500)
-      .attr('cx', function(d) {return Math.random() * gameOptions.width;})
-      .attr('cy', function(d) {return Math.random() * gameOptions.height;});
-  };
-
+// function calls with setInterval
   setInterval(updateEnemies, 1000);
   var checkCollisions = function(data) {
     enemies.each(collisionChecker);
