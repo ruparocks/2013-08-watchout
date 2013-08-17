@@ -63,6 +63,15 @@ var game = function(height, width, numOfEnemies) {
   var enemies = svg.selectAll("circle.enemy").data(enemyData);
   var player = svg.selectAll("circle.player").data(playerData);
 
+  var dragMove = d3.behavior.drag()
+    .on('drag', function(d) {
+      d.x += d3.event.dx;
+      d.y += d3.event.dy;
+      d3.select(this).attr('cx', function(d) {return d.x;}).attr('cy', function(d) {return d.y;});
+    });
+
+
+
   enemies.enter().append("circle")
     .attr("class", "enemy")
     .attr("fill", "black")
@@ -75,7 +84,11 @@ var game = function(height, width, numOfEnemies) {
     .attr("fill", "red")
     .attr("cx", function(d) {return d.x;})
     .attr("cy", function(d) {return d.y;})
-    .attr("r", function(d){return d.r;});
+    .attr("r", function(d){return d.r;})
+    .call(dragMove);
+
+
+
 
   //update function.
   //find new coordinates for all enemies
@@ -87,6 +100,12 @@ var game = function(height, width, numOfEnemies) {
       .attr('cx', function(d) {return Math.random() * gameOptions.width;})
       .attr('cy', function(d) {return Math.random() * gameOptions.height;});
   };
+
+  var updatePlayer = function(data) {
+    player.transition()
+      .duration(1)
+      .attr('cx')
+  }
 
   setInterval(updateEnemies, 1000);
 
