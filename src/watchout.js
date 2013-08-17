@@ -47,19 +47,35 @@ var game = function(height, width, numOfEnemies) {
     var player = {
       "id" : 'player',
       "x": gameOptions.width * 0.5,
-      "y": gameOptions.height * 0.5
+      "y": gameOptions.height * 0.5,
+      "r": 8
     };
     return player;
   };
 
   // makes the array of objects
-  var data = _.range(0, gameOptions.numberOfEnemies).map(function(i){
+  var enemyData = _.range(0, gameOptions.numberOfEnemies).map(function(i){
     return Enemy(i);
   });
 
-  var enemies = svg.selectAll("circle.enemy").data(data);
+  var playerData = [Player()];
 
-  enemies.enter().append("circle").attr("class", "enemy").attr("fill", "black").attr("cx", function(d){return d.x;}).attr("cy", function(d) {return d.y;}).attr("r", function(d){return d.r;});
+  var enemies = svg.selectAll("circle.enemy").data(enemyData);
+  var player = svg.selectAll("circle.player").data(playerData);
+
+  enemies.enter().append("circle")
+    .attr("class", "enemy")
+    .attr("fill", "black")
+    .attr("cx", function(d){return d.x;})
+    .attr("cy", function(d) {return d.y;})
+    .attr("r", function(d){return d.r;});
+
+  player.enter().append("circle")
+    .attr("class", "player")
+    .attr("fill", "red")
+    .attr("cx", function(d) {return d.x;})
+    .attr("cy", function(d) {return d.y;})
+    .attr("r", function(d){return d.r;});
 
   //update function.
   //find new coordinates for all enemies
