@@ -70,8 +70,6 @@ var game = function(height, width, numOfEnemies) {
       d3.select(this).attr('cx', function(d) {return d.x;}).attr('cy', function(d) {return d.y;});
     });
 
-
-
   enemies.enter().append("circle")
     .attr("class", "enemy")
     .attr("fill", "black")
@@ -87,7 +85,24 @@ var game = function(height, width, numOfEnemies) {
     .attr("r", function(d){return d.r;})
     .call(dragMove);
 
+// collisionChecker
+  var collisionChecker = function() {
+    var playerX = d3.select("circle.player").attr("cx");
+    var playerY = d3.select("circle.player").attr("cy");
+    var playerR = d3.select("circle.player").attr("r");
 
+    var enemyX = d3.select(this).attr("cx");
+    var enemyY = d3.select(this).attr("cy");
+    var enemyR = d3.select(this).attr("r");
+    var distance;
+    distance = Math.sqrt(Math.pow(enemyX - playerX, 2) + Math.pow(enemyY - playerY, 2)) - enemyR - playerR;
+    if (distance < 0) {
+        console.log("collision!");
+        // update score
+        // update highest score
+        // reset score
+    }
+  };
 
 
   //update function.
@@ -101,14 +116,11 @@ var game = function(height, width, numOfEnemies) {
       .attr('cy', function(d) {return Math.random() * gameOptions.height;});
   };
 
-  var updatePlayer = function(data) {
-    player.transition()
-      .duration(1)
-      .attr('cx')
-  }
-
   setInterval(updateEnemies, 1000);
-
+  var checkCollisions = function(data) {
+    enemies.each(collisionChecker);
+  };
+  setInterval(checkCollisions, 50);
 };
 
 
