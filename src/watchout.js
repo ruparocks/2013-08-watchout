@@ -1,12 +1,3 @@
-// Keep track of the user's score, and display it.
-
-// make a gameboard (axes)
-// make game options and game stats
-// make function to actually play (increment scores, generate new enemies, etc.) enter, update, edit
-// make collission detection function
-// make dragging functionality
-// update scores
-
 var game = function(height, width, numOfEnemies) {
   // make object gameOptions to hold all the game options
   var gameOptions = {
@@ -73,9 +64,12 @@ var game = function(height, width, numOfEnemies) {
     distance = Math.sqrt(Math.pow(enemyX - playerX, 2) + Math.pow(enemyY - playerY, 2)) - enemyR - playerR;
     if (distance < 0) {
         console.log("collision!");
+        if (currentScore > highScore) {
+          highScore = currentScore;
+          d3.select(".highscore").text("High Score: " + highScore);
+        }
         currentScore = 0;
         d3.select(".myscore").text("My Score: " + currentScore);
-        // update highest score
     } else {
       currentScore++;
       d3.select(".myscore").text("My Score: " + currentScore);
