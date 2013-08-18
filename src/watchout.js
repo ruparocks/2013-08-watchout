@@ -19,7 +19,7 @@ var game = function(height, width, numOfEnemies) {
       "id": i,
       "x": Math.random() * width, // *100 to navigate on x-axis when range is 0-100
       "y": Math.random() * height, // *100 to navigate on y-axis when range is 0-100
-      "r": 10
+      "r": 14
     };
     return enemy;
   };
@@ -29,7 +29,7 @@ var game = function(height, width, numOfEnemies) {
       "id" : 'player',
       "x": gameOptions.width * 0.5,
       "y": gameOptions.height * 0.5,
-      "r": 8
+      "r": 12
     };
     return player;
   };
@@ -87,7 +87,7 @@ var game = function(height, width, numOfEnemies) {
   // appends enemies with styles
   enemies.enter().append("circle")
     .attr("class", "enemy")
-    .attr("fill", "black")
+    .attr("fill", "#0671FF")
     .attr("cx", function(d){return d.x;})
     .attr("cy", function(d) {return d.y;})
     .attr("r", function(d){return d.r;});
@@ -95,7 +95,7 @@ var game = function(height, width, numOfEnemies) {
   //// appends player with styles
   player.enter().append("circle")
     .attr("class", "player")
-    .attr("fill", "red")
+    .attr("fill", "#FF2B18")
     .attr("cx", function(d) {return d.x;})
     .attr("cy", function(d) {return d.y;})
     .attr("r", function(d){return d.r;})
@@ -109,48 +109,4 @@ var game = function(height, width, numOfEnemies) {
   setInterval(checkCollisions, 50);
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-game(700, 700, 10);
+game(455, 765, 20);
